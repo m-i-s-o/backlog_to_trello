@@ -1,0 +1,37 @@
+# Happy Coding!
+
+service: backlog2trello
+
+custom:
+    config:
+        accountId: 000000000000
+
+provider:
+  name: aws
+  runtime: python3.8
+  profile: default
+
+# you can overwrite defaults here
+  stage: prod
+  region: ap-northeast-1
+
+
+functions:
+  main:
+    handler: main.main
+    environment:
+      ENV: 'PROD'
+      T_API_KEY: (Trello API key)
+      T_API_TOKEN: (Trello API token)
+      T_MEMBER_ID: (Trello User ID)
+      DEV_T_BOARD_ID: ([DEV]Trello Board ID)
+      DEV_T_LIST_ID: ([DEV]Trello List key)
+      PROD_T_BOARD_ID: ([PROD]Trello Board ID)
+      PROD_T_LIST_ID: ([PROD]Trello List key)
+      B_API_KEY: (Backlog API key)
+      B_URL_BASE: (Backlog Project URL)
+      B_PROJECT_ID: (Backlog Project ID)
+      B_STORY_TYPE_ID: (Backlog Issue Type ID)
+    timeout: 300
+    events:
+      - schedule: cron(0 0 ? * THU *)
