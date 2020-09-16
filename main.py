@@ -8,12 +8,15 @@ ENV = os.getenv('ENV')  # DEV / PROD
 T_API_KEY = os.getenv('T_API_KEY')
 T_API_TOKEN = os.getenv('T_API_TOKEN')
 T_MEMBER_ID = os.getenv('T_MEMBER_ID')
-B_API_KEY = os.getenv('B_API_KEY')
-B_PROJECT_ID = int(os.getenv('B_PROJECT_ID'))
-B_STORY_TYPE_ID = int(os.getenv('B_STORY_TYPE_ID'))
-
 T_BOARD_ID = os.getenv(f'{ENV}_T_BOARD_ID')
 T_LIST_ID = os.getenv(f'{ENV}_T_LIST_ID')
+
+B_API_KEY = os.getenv('B_API_KEY')
+B_URL_BASE = os.getenv('B_URL_BASE')
+B_PROJECT_KEY = os.getenv('B_PROJECT_KEY')
+B_PROJECT_ID = int(os.getenv('B_PROJECT_ID'))
+B_STATUS_ID = int(os.getenv('B_STATUS_ID'))
+B_STORY_TYPE_ID = int(os.getenv('B_STORY_TYPE_ID'))
 
 
 def get(url, param):
@@ -35,12 +38,11 @@ def get_backlog_issues():
     param = {
         "apiKey": B_API_KEY,
         "projectId[]": [B_PROJECT_ID],
-        "statusId[]": [2],
+        "statusId[]": [B_STATUS_ID],
         "issueTypeId[]": [B_STORY_TYPE_ID],
         "updatedSince": lastweek_str
     }
-    url = f'https://swx.backlog.jp/api/v2/issues'
-    issues = get(url, param)
+    issues = get(f'{B_URL_BASE}/api/v2/issues', param)
 
     return issues
 
@@ -49,12 +51,12 @@ def filter_issues(issues):
     if not issues:
         return
 
-    BACKLOG_URL_BASE = os.getenv('B_PROJECT_URL_BASE')  # https://xxx.backlog.jp/view/PROJECTCODE の形
+    BACKLOG_PROJECT_URL = f'{B_URL_BASE}/view/{B_PROJECT_KEY}'
     doing_issues = []
     for issue in issues:
         card = {
             "name": issue['summary'],
-            "desc": issue['description'] + '\n\n課題URL：' + f'{BACKLOG_URL_BASE}-{issue["keyId"]}',
+            "desc": issue['description'] + '\n\n課題URL：' + f'{BACKLOG_PROJECT_URL}-{issue["keyId"]}',
             "due": issue['dueDate'][:10] if issue['dueDate'] else None
         }
         doing_issues.append(card)

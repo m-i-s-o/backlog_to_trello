@@ -29,9 +29,11 @@ functions:
       PROD_T_BOARD_ID: ([PROD]Trello Board ID)
       PROD_T_LIST_ID: ([PROD]Trello List key)
       B_API_KEY: (Backlog API key)
-      B_URL_BASE: (Backlog Project URL)
+      B_URL_BASE: (Backlog URL)  # https://xxx.backlog.jp
+      B_PROJECT_KEY: (Backlog Project KEY)
       B_PROJECT_ID: (Backlog Project ID)
       B_STORY_TYPE_ID: (Backlog Issue Type ID)
+      B_STATUS_ID: (Backlog Issue Status ID)
     timeout: 300
     events:
       - schedule: cron(0 0 ? * THU *)
